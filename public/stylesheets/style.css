@@ -10,7 +10,7 @@ body {
 .sidebar {
     position: fixed;
     background-color: #f5f5f5;
-    width: 50%;
+    width: 100%;
     height: 100%;
     padding: 20px;
     top: 51px;
@@ -58,12 +58,15 @@ body {
 	color: #fff;
     font-size: 1em;
     font-weight: 400;
+    text-align: center;
 }
 
 .newNote{
 	float: right;
 }
-
+.goBack{
+    float: left;
+}
 .paper {
 	min-height: calc(100% - 50px);
 	line-height:1.5em;
@@ -85,21 +88,87 @@ body {
 	height: 50px;
 }
 
-
 @media (max-width: 768px) {
 
-.main{
-    transform: translate3d(100%, 0, 0);
-    -ms-transform:translate3d(100%, 0, 0);
-    -moz-transform:translate3d(100%, 0, 0);
-    -webkit-transform:translate3d(100%, 0, 0);
+
+[state="notes.detail"] .side, [state="notes.new"] .side{
+    transform: translateX(0);
+    -ms-transform:translateX(0);
+    -moz-transform:translateX(0);
+    -webkit-transform:translateX(0);
 }
-.main-open{
-    transform: translate3d(0, 0, 0);
-    -moz-transform:translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-    transition: transform 1s;
-    -moz-transition: -moz-transform 1s;
-    -webkit-transition: -webkit-transform 1s;
+
+[state="notes.detail"] .side-close, [state="notes.new"] .side-close{
+    transform: translateX(-100%);
+    -moz-transform:translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    -webkit-transition:all 1s ease-in-out;
+    -moz-transition:all 1s ease-in-out;
+    -o-transition:all 1s ease-in-out;
+    transition:all 1s ease-in-out;
+
 }
+
+[state="notes"] .side{
+    transform: translateX(-100%);
+    -ms-transform:translateX(-100%);
+    -moz-transform:translateX(-100%);
+    -webkit-transform:translateX(-100%);
+}
+
+[state="notes"] .side-open{
+    z-index: 1000;
+    transform: translateX(0);
+    -moz-transform:translateX(0);
+    -webkit-transform: translateX(0);
+    -webkit-transition:all 1s ease-in-out;
+    -moz-transition:all 1s ease-in-out;
+    -o-transition:all 1s ease-in-out;
+    transition:all 1s ease-in-out;
+
+}
+
+[ui-view].ng-enter, [ui-view].ng-leave {
+
+    -webkit-transition:all 1s ease-in-out;
+    -moz-transition:all 1s ease-in-out;
+    -o-transition:all 1s ease-in-out;
+    transition:all 1s ease-in-out;
+
+}
+
+#note.ng-enter{
+
+    transform: translateX(100%);
+    -ms-transform:translateX(100%);
+    -moz-transform:translateX(100%);
+    -webkit-transform:translateX(100%);
+
+}
+
+#note.ng-enter-active{
+
+    transform: translateX(0);
+    -moz-transform:translateX(0);
+    -webkit-transform: translateX(0);
+
+}
+
+/*#note.ng-leave {
+
+    transform: translateX(0);
+    -moz-transform:translateX(0);
+    -webkit-transform: translateX(0);
+
+}*/
+
+#note.ng-leave, #note.ng-leave-active {
+    
+    transform: translateX(100%);
+    -ms-transform:translateX(100%);
+    -moz-transform:translateX(100%);
+    -webkit-transform:translateX(100%);
+
+}
+
 }

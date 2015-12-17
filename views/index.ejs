@@ -10,10 +10,15 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-animate.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
   </head>
-  <body>
+  <body state="{{$state.current.name}}">
     <div class="navbar navbar-inverse navbar-fixed-top topbar">
-    	<%= title %>
-<!--     	<input id="setbtn" type="button" value="set" ng-click="myVar='main-open'">
+    	<a ng-show="isnotList" ui-sref="notes" class="goBack">
+    		<button type="button" class="btn btn-primary btn-lg">
+				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+			</button>
+		</a>
+    	<span><%= title %><span>
+<!--     <input id="setbtn" type="button" value="set" ng-click="myVar='main-open'">
     	<input id="clearbtn" type="button" value="clear" ng-click="myVar=''"> -->
     	<a ui-sref="notes.new" class="newNote">
     		<button type="button" class="btn btn-primary btn-lg">
@@ -32,7 +37,7 @@
     <!-- Notes List Template -->
 	<script type="text/ng-template" id="/notes.html">
 
-		<div ui-view="side" class="sidebar" state-loader>
+		<div ui-view="side" class="sidebar side side-close side-open" id="list" state-loader>
 				<input class="form-control" placeholder="Search..." type="text" ng-model="search.body">
 				<ul class="nav nav-sidebar">
 				    <li ng-repeat="note in notes | filter: search">
@@ -42,7 +47,7 @@
 				    </li>
 				</ul>
 		</div>
-		<div ui-view class="main fullheight" ng-class="myVar"></div>
+		<div ui-view class="main fullheight" id="note" ></div>
 
 	</script>
 
@@ -68,7 +73,7 @@
 	</script>
 
     <script>
-		angular.module('app', ['ngRoute', 'ngResource', 'ui.router'])
+		angular.module('app', ['ngRoute', 'ngResource', 'ui.router', 'ngAnimate'])
 
 		.run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams){
 
@@ -91,17 +96,19 @@
 	    // Controllers
 	    //---------------
 
-	    .controller('NoteController', ['$scope', 'Notes', function ($scope, Notes) {
+	    .controller('NoteController', ['$rootScope','$scope', 'Notes', function ($rootScope, $scope, Notes) {
+	    	$rootScope.isnotList = false;
 	    	$scope.notes = Notes.query();
 	    }])
 
-	    .controller('NoteDetailCtrl', ['$scope', '$stateParams', 'Notes', '$state', function ($scope, $stateParams, Notes, $state) {
+	    .controller('NoteDetailCtrl', ['$rootScope','$scope', '$stateParams', 'Notes', '$state', function ($rootScope, $scope, $stateParams, Notes, $state) {
 
 	    	$scope.creating = true;
 	    	$scope.prop = 'main';
 	    	if($state.current.name === 'notes.detail'){
 	    		$scope.note = Notes.get({ id: $stateParams.id });
 	    		$scope.creating = false;
+	    		$rootScope.isnotList = true;
 	    	}
 
 	    	$scope.save = function(){
@@ -135,7 +142,7 @@
 	    }])
 
 	    //---------------
-	    // Directive
+	    // Directives
 	    //---------------
 
 	    .directive('contenteditable', function(){
@@ -161,14 +168,10 @@
 				link: function (scope, element) {
 		        	scope.$on('$stateChangeStart', function (e, toState) {
 		        		if ( "notes.detail" === toState.name || "notes.new" === toState.name) {
-		            		element.next().addClass('main-open');
+		            		//element.next().addClass('main-open');
 		            		console.log('done');
 		        			}
 		        	});
-
-		        	// scope.$on('$viewContentLoaded', function () {
-		         //  		element.removeClass('loading-state');
-		        	// });
 		      	}
 		    };
 		})
@@ -181,20 +184,15 @@
 
 	        $stateProvider
 		        .state('notes', {
-		        	abstract: true,
 		         	url: '/',
 		         	templateUrl: '/notes.html',
 		         	controller: 'NoteController'
 	        	})
-	        	.state('notes.list', {
+/*	        	.state('notes.list', {
 		         	url: '',
-		         	views:{
-		         		'side':{
-		         	         	templateUrl: '/notes.html',
-		         				controller: 'NoteController'
-		         		}
-		         	}
-	        	})
+					templateUrl: '/notes.html',
+		         	controller: 'NoteController'
+	        	})*/
 	        	.state('notes.new', {
 		        	url: 'new',
 					templateUrl: '/noteDetails.html',
