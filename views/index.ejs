@@ -1,226 +1,200 @@
 <!DOCTYPE html>
 <html ng-app="app">
-  <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-resource.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-animate.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
-  </head>
-  <body state="{{$state.current.name}}">
-    <div class="navbar navbar-inverse navbar-fixed-top topbar">
-    	<a ng-show="isnotList" ui-sref="notes" class="goBack">
-    		<button type="button" class="btn btn-primary btn-lg">
-				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
-			</button>
-		</a>
-    	<span><%= title %><span>
-<!--     <input id="setbtn" type="button" value="set" ng-click="myVar='main-open'">
-    	<input id="clearbtn" type="button" value="clear" ng-click="myVar=''"> -->
-    	<a ui-sref="notes.new" class="newNote">
-    		<button type="button" class="btn btn-primary btn-lg">
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-			</button>
-		</a>
-
-    </div>
-
-    <div class="container-fluid fullheight">
-
-    	<div ui-view class="row fullheight"></div>
-
-    </div>
-
-    <!-- Notes List Template -->
-	<script type="text/ng-template" id="/notes.html">
-
-		<div ui-view="side" class="sidebar side side-close side-open" id="list" state-loader>
-				<input class="form-control" placeholder="Search..." type="text" ng-model="search.body">
-				<ul class="nav nav-sidebar">
-				    <li ng-repeat="note in notes | filter: search">
-				    	<a ui-sref="notes.detail({id:note._id})">
-				    		{{note.body | limitTo : 20}}{{note.body.length > 20 ? '...' : ''}}
-				    	</a>
-				    </li>
-				</ul>
-		</div>
-		<div ui-view class="main fullheight" id="note" ></div>
-
-	</script>
-
-	<!-- New Note and Note DetailsTemplate -->
-	<script type="text/ng-template" id="/noteDetails.html">
-
-		<p ng-show="!creating" class="paper" contentEditable="true" ng-model="note.body">{{ note.body }}</p>
-		<p ng-show="creating" class="paper" contentEditable="true" ng-model="newNote.body"></p>
-		<div class="bottom-panel">
-			<div class="btn-group bottom" role="group" aria-label="...">
-				<button ng-show="creating" ng-click="save()" type="button" class="btn btn-primary">
-			  		<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save
-			  	</button>
-			  	<button ng-show="!creating" ng-click="update()" type="button" class="btn btn-primary">
-			  		<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Update
-			  	</button>
-				<button ng-show="!creating" ng-click="remove($index)" type="button" class="btn btn-danger">
-			  		<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove
+  	<head>
+    	<title><%= title %></title>
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    	<link rel='stylesheet' href='/stylesheets/style.css' />
+    	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-resource.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-animate.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+  	</head>
+  	<body state="{{$state.current.name}}">
+    	<div class="navbar navbar-inverse navbar-fixed-top topbar">
+	    	<a ng-show="isnotList" ui-sref="notes" class="goBack">
+	    		<button type="button" class="btn btn-primary btn-lg">
+					<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 				</button>
-			</div>
+			</a>
+    		<span><%= title %><span>
+	    	<a ui-sref="notes.new" class="newNote">
+	    		<button type="button" class="btn btn-primary btn-lg">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+				</button>
+			</a>
 		</div>
 
-	</script>
+	    <div class="container-fluid fullheight">
 
-    <script>
-		angular.module('app', ['ngRoute', 'ngResource', 'ui.router', 'ngAnimate'])
+	    	<div ui-view class="row fullheight"></div>
 
-		.run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams){
+	    </div>
 
-			$rootScope.$state = $state;
-			$rootScope.$stateParams = $stateParams;
-			$rootScope.isnotList = false;
+	    <!-- Notes List Template -->
+		<script type="text/ng-template" id="/notes.html">
 
-		}])
+			<div ui-view="side" class="sidebar side side-close side-open" id="list" state-loader>
+					<input class="form-control" placeholder="Search..." type="text" ng-model="search.body">
+					<ul class="nav nav-sidebar">
+					    <li ng-repeat="note in notes | filter: search">
+					    	<a ui-sref="notes.detail({id:note._id})">
+					    		{{note.body | limitTo : 20}}{{note.body.length > 20 ? '...' : ''}}
+					    	</a>
+					    </li>
+					</ul>
+			</div>
+			<div ui-view class="main fullheight" id="note" ></div>
 
-	    //---------------
-	    // Factory
-	    //---------------
+		</script>
 
-	    .factory('Notes', ['$resource', function($resource){
-	    	return $resource('/notes/:id', null, {
-	    		'update': { method: 'PUT'}
-	    	});
-	    }])
+		<!-- New Note and Note DetailsTemplate -->
+		<script type="text/ng-template" id="/noteDetails.html">
 
-	    //---------------
-	    // Controllers
-	    //---------------
+			<p ng-show="!creating" class="paper" contentEditable="true" ng-model="note.body">{{ note.body }}</p>
+			<p ng-show="creating" class="paper" contentEditable="true" ng-model="newNote.body"></p>
+			<div class="bottom-panel">
+				<div class="btn-group bottom" role="group" aria-label="...">
+					<button ng-show="creating" ng-click="save()" type="button" class="btn btn-primary">
+				  		<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save
+				  	</button>
+				  	<button ng-show="!creating" ng-click="update()" type="button" class="btn btn-primary">
+				  		<span class="glyphicon glyphicon-save" aria-hidden="true"></span> Update
+				  	</button>
+					<button ng-show="!creating" ng-click="remove($index)" type="button" class="btn btn-danger">
+				  		<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove
+					</button>
+				</div>
+			</div>
 
-	    .controller('NoteController', ['$scope', 'Notes', function ($scope, Notes) {
-	    	$scope.notes = Notes.query();
-	    }])
-	    .controller('NoteDetailCtrl', ['$scope', '$stateParams', 'Notes', '$state', function ($scope, $stateParams, Notes, $state) {
+		</script>
 
-	    	$scope.creating = true;
-	    	if($state.current.name === 'notes.detail'){
-	    		$scope.note = Notes.get({ id: $stateParams.id });
-	    		$scope.creating = false;
-	    	}
+	    <script>
+	    
+			angular.module('app', ['ngRoute', 'ngResource', 'ui.router', 'ngAnimate'])
 
-	    	$scope.save = function(){
-	    		if(!$scope.newNote || $scope.newNote.body.length < 1){
-	    			console.log('free');
-	    			return;
-	    		} 
-	    		
-	    		var note = new Notes({ 
-	    			body: $scope.newNote.body
-	    		});
+			.run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams){
 
-	    		note.$save(function(){
-	    			$scope.notes.push(note);
-	    			$scope.newNote = '';
-	    		});
-	    	}
+				$rootScope.$state = $state;
+				$rootScope.$stateParams = $stateParams;
+				$rootScope.isnotList = false;
 
-	    	$scope.remove = function(){
-	    		Notes.remove({id: $scope.note._id }, function(){
-	    			$state.reload('notes');
-	    		});
-	    	}
+			}])
 
-	    	$scope.update = function(){
-	    		Notes.update({id: $scope.note._id}, $scope.note, function(){
-	    			$state.reload('notes');
-	    		});
-	    	}
+		    //---------------
+		    // Factory
+		    //---------------
 
-	    }])
+		    .factory('Notes', ['$resource', function($resource){
+		    	return $resource('/notes/:id', null, {
+		    		'update': { method: 'PUT'}
+		    	});
+		    }])
 
-	    //---------------
-	    // Directives
-	    //---------------
+		    //---------------
+		    // Controllers
+		    //---------------
 
-	    .directive('contenteditable', function(){
-	    	return {
-	    		require: 'ngModel',
-	    		link: function(scope, elm, attrs, ctrl){
-	    			elm.on('blur', function(){
-	    				ctrl.$setViewValue(elm.html());
-	    			});
+		    .controller('NoteController', ['$scope', 'Notes', function ($scope, Notes) {
+		    	$scope.notes = Notes.query();
+		    }])
+		    .controller('NoteDetailCtrl', ['$scope', '$stateParams', 'Notes', '$state', function ($scope, $stateParams, Notes, $state) {
 
-	    			ctrl.$render = function(){
-	    				elm.html(ctrl.$viewValue);
-	    			};
+		    	$scope.creating = true;
+		    	if($state.current.name === 'notes.detail'){
+		    		$scope.note = Notes.get({ id: $stateParams.id });
+		    		$scope.creating = false;
+		    	}
 
-	    			ctrl.$setViewValue(elm.html());
-	    		}
-	    	};
-	    })
-/*	    .directive('stateLoader', function stateLoader() {
-		    return {
-		    	restrict: 'A',
-		    	scope: {},
-				link: function (scope, element) {
-		        	scope.$on('$stateChangeStart', function (e, toState) {
-		        		if ( "notes.detail" === toState.name || "notes.new" === toState.name) {
-		            		//element.next().addClass('main-open');
-		            		console.log('done');
-		        			}
-		        	});
-		      	}
-		    };
-		})*/
+		    	$scope.save = function(){
+		    		if(!$scope.newNote || $scope.newNote.body.length < 1){
+		    			console.log('free');
+		    			return;
+		    		} 
+		    		
+		    		var note = new Notes({ 
+		    			body: $scope.newNote.body
+		    		});
 
-	    //---------------
-	    // Routes
-	    //---------------
+		    		note.$save(function(){
+		    			$scope.notes.push(note);
+		    			$scope.newNote = '';
+		    		});
+		    	}
 
-	    .config(['$stateProvider','$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+		    	$scope.remove = function(){
+		    		Notes.remove({id: $scope.note._id }, function(){
+		    			$state.reload('notes');
+		    		});
+		    	}
 
-	        $stateProvider
-		        .state('notes', {
-		         	url: '/',
-		         	templateUrl: '/notes.html',
-		         	controller: 'NoteController'
-	        	})
-/*	        	.state('notes.list', {
-		         	url: '',
-					templateUrl: '/notes.html',
-		         	controller: 'NoteController'
-	        	})*/
-	        	.state('notes.new', {
-		        	url: 'new',
-					templateUrl: '/noteDetails.html',
-			        controller: 'NoteDetailCtrl',
-			        onEnter: function($rootScope){
-			        	$rootScope.isnotList = true;
-			        },
-			        onExit: function($rootScope){
-			        	$rootScope.isnotList = false;
-			        }
-		        })
-		        .state('notes.detail', {
-		        	url: ':id',
-					templateUrl: '/noteDetails.html',
-			        controller: 'NoteDetailCtrl',
-			        onEnter: function($rootScope){
-			        	$rootScope.isnotList = true;
-			        },
-			        onExit: function($rootScope){
-			        	$rootScope.isnotList = false;
-			        }
-		        })
-			;
+		    	$scope.update = function(){
+		    		Notes.update({id: $scope.note._id}, $scope.note, function(){
+		    			$state.reload('notes');
+		    		});
+		    	}
 
-	    }]);
+		    }])
 
-	</script>
-	<script type="text/javascript">
+		    //---------------
+		    // Directives
+		    //---------------
 
+		    .directive('contenteditable', function(){
+		    	return {
+		    		require: 'ngModel',
+		    		link: function(scope, elm, attrs, ctrl){
+		    			elm.on('blur', function(){
+		    				ctrl.$setViewValue(elm.html());
+		    			});
 
-	</script>
+		    			ctrl.$render = function(){
+		    				elm.html(ctrl.$viewValue);
+		    			};
 
-  </body>
+		    			ctrl.$setViewValue(elm.html());
+		    		}
+		    	};
+		    })
+
+		    //---------------
+		    // Routes
+		    //---------------
+
+		    .config(['$stateProvider','$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+
+		        $stateProvider
+			        .state('notes', {
+			         	url: '/',
+			         	templateUrl: '/notes.html',
+			         	controller: 'NoteController'
+		        	})
+		        	.state('notes.new', {
+			        	url: 'new',
+						templateUrl: '/noteDetails.html',
+				        controller: 'NoteDetailCtrl',
+				        onEnter: function($rootScope){
+				        	$rootScope.isnotList = true;
+				        },
+				        onExit: function($rootScope){
+				        	$rootScope.isnotList = false;
+				        }
+			        })
+			        .state('notes.detail', {
+			        	url: ':id',
+						templateUrl: '/noteDetails.html',
+				        controller: 'NoteDetailCtrl',
+				        onEnter: function($rootScope){
+				        	$rootScope.isnotList = true;
+				        },
+				        onExit: function($rootScope){
+				        	$rootScope.isnotList = false;
+				        }
+			        })
+				;
+
+		    }]);
+
+		</script>
+  	</body>
 </html>

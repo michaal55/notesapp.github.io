@@ -6,17 +6,17 @@ var Note = require('../models/Note.js');
 /* GET notes listing */
 router.get('/', function(req, res, next) {
 
-	Note.find(function(err, notes){
-		if(err) return next(err);
-  		res.json(notes);
+	Note.find(function(err, notes) {
+		if (err) return next(err);
+		res.json(notes);
 	});
 
 });
 
 /* POST note */
-router.post('/', function(req, res, next){
+router.post('/', function(req, res, next) {
 
-	Note.create(req.body, function(err, note){
+	Note.create(req.body, function(err, note) {
 		if (err) return next(err);
 		res.json(note);
 	});
@@ -24,9 +24,9 @@ router.post('/', function(req, res, next){
 });
 
 /* GET note by Id */
-router.get('/:id', function(req, res, next){
+router.get('/:id', function(req, res, next) {
 
-	Note.findById(req.params.id, function(err, note){
+	Note.findById(req.params.id, function(err, note) {
 		if (err) return next(err);
 		res.json(note);
 	});
@@ -34,9 +34,9 @@ router.get('/:id', function(req, res, next){
 });
 
 /* PUT note by Id */
-router.put('/:id', function(req , res, next){
+router.put('/:id', function(req, res, next) {
 
-	Note.findByIdAndUpdate(req.params.id, req.body, function(err, note){
+	Note.findByIdAndUpdate(req.params.id, req.body, function(err, note) {
 		if (err) return next(err);
 		res.json(note);
 	});
@@ -44,9 +44,9 @@ router.put('/:id', function(req , res, next){
 });
 
 /* DELETE note by Id */
-router.delete('/:id', function(req ,res ,next){
+router.delete('/:id', function(req, res, next) {
 
-	Note.findByIdAndRemove(req.params.id, req.body, function(err, note){
+	Note.findByIdAndRemove(req.params.id, req.body, function(err, note) {
 		if (err) return next(err);
 		res.json(note);
 	});
