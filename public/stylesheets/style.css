@@ -59,11 +59,15 @@ body {
 .topbar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
 	background: #337ab7 none repeat scroll 0 0;
 	color: #fff;
     font-size: 1em;
     font-weight: 400;
+}
+
+.topbar span{
+    flex-grow: 2;
+    text-align: center;
 }
 
 .paper {
