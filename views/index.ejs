@@ -79,6 +79,7 @@
 
 			$rootScope.$state = $state;
 			$rootScope.$stateParams = $stateParams;
+			$rootScope.isnotList = false;
 
 		}])
 
@@ -96,19 +97,15 @@
 	    // Controllers
 	    //---------------
 
-	    .controller('NoteController', ['$rootScope','$scope', 'Notes', function ($rootScope, $scope, Notes) {
-	    	$rootScope.isnotList = false;
+	    .controller('NoteController', ['$scope', 'Notes', function ($scope, Notes) {
 	    	$scope.notes = Notes.query();
 	    }])
-
-	    .controller('NoteDetailCtrl', ['$rootScope','$scope', '$stateParams', 'Notes', '$state', function ($rootScope, $scope, $stateParams, Notes, $state) {
+	    .controller('NoteDetailCtrl', ['$scope', '$stateParams', 'Notes', '$state', function ($scope, $stateParams, Notes, $state) {
 
 	    	$scope.creating = true;
-	    	$scope.prop = 'main';
 	    	if($state.current.name === 'notes.detail'){
 	    		$scope.note = Notes.get({ id: $stateParams.id });
 	    		$scope.creating = false;
-	    		$rootScope.isnotList = true;
 	    	}
 
 	    	$scope.save = function(){
@@ -161,7 +158,7 @@
 	    		}
 	    	};
 	    })
-	    .directive('stateLoader', function stateLoader() {
+/*	    .directive('stateLoader', function stateLoader() {
 		    return {
 		    	restrict: 'A',
 		    	scope: {},
@@ -174,7 +171,7 @@
 		        	});
 		      	}
 		    };
-		})
+		})*/
 
 	    //---------------
 	    // Routes
@@ -196,12 +193,24 @@
 	        	.state('notes.new', {
 		        	url: 'new',
 					templateUrl: '/noteDetails.html',
-			        controller: 'NoteDetailCtrl'
+			        controller: 'NoteDetailCtrl',
+			        onEnter: function($rootScope){
+			        	$rootScope.isnotList = true;
+			        },
+			        onExit: function($rootScope){
+			        	$rootScope.isnotList = false;
+			        }
 		        })
 		        .state('notes.detail', {
 		        	url: ':id',
 					templateUrl: '/noteDetails.html',
-			        controller: 'NoteDetailCtrl'
+			        controller: 'NoteDetailCtrl',
+			        onEnter: function($rootScope){
+			        	$rootScope.isnotList = true;
+			        },
+			        onExit: function($rootScope){
+			        	$rootScope.isnotList = false;
+			        }
 		        })
 			;
 
