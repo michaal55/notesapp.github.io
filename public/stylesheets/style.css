@@ -57,19 +57,15 @@ body {
 }
 
 .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 	background: #337ab7 none repeat scroll 0 0;
 	color: #fff;
     font-size: 1em;
     font-weight: 400;
-    text-align: center;
 }
 
-.newNote{
-	float: right;
-}
-.goBack{
-    float: left;
-}
 .paper {
 	min-height: calc(100% - 50px);
 	line-height:1.5em;

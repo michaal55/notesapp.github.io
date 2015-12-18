@@ -17,7 +17,7 @@
 					<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 				</button>
 			</a>
-    		<span><%= title %><span>
+    		<span><%= title %></span>
 	    	<a ui-sref="notes.new" class="newNote">
 	    		<button type="button" class="btn btn-primary btn-lg">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -70,7 +70,7 @@
 		</script>
 
 	    <script>
-	    
+
 			angular.module('app', ['ngRoute', 'ngResource', 'ui.router', 'ngAnimate'])
 
 			.run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams){
